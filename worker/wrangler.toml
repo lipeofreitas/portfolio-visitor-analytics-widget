@@ -1,0 +1,8 @@
+name = "portfolio-visitor-analytics-api"
+main = "src/index.js"
+compatibility_date = "2026-05-25"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "portfolio_visitor_analytics"
+database_id = "d4f88cf2-5a31-495e-b360-1bea8a3eac1b"

@@ -21,6 +21,14 @@ portfolio
 doublef
 ```
 
+## Current Cloudflare Resources
+
+```text
+Worker: portfolio-visitor-analytics-api
+D1:     portfolio_visitor_analytics
+Binding: DB
+```
+
 ## Privacy Direction
 
 - Do not store raw IP addresses.
@@ -49,3 +57,45 @@ visit_count
 Country reporting should use `first_country`. For example, if a visitor first opens the site in Brazil and later opens it from Japan using the same browser/device, the visitor remains one unique visitor. `last_country` may update to Japan, but the public top-country flags should still count Brazil.
 
 This avoids inflating country counts when the same visitor travels while keeping the implementation anonymous and simple enough for a portfolio case study.
+
+## API Shape
+
+```text
+GET /health
+```
+
+Returns a basic availability check.
+
+```text
+POST /track
+```
+
+Expected body:
+
+```json
+{
+  "siteId": "portfolio",
+  "visitorId": "anonymous-browser-generated-id",
+  "path": "/"
+}
+```
+
+The backend stores only a salted hash of `visitorId`.
+
+```text
+GET /summary?siteId=portfolio
+```
+
+Expected response:
+
+```json
+{
+  "ok": true,
+  "siteId": "portfolio",
+  "uniqueVisits": 305,
+  "countries": [
+    { "country": "BR", "visits": 155 },
+    { "country": "ES", "visits": 80 }
+  ]
+}
+```

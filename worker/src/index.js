@@ -120,8 +120,33 @@ async function loadSummary(env, siteId) {
     .bind(siteId)
     .all();
 
+  const wowResult = await env.DB.prepare(`
+    WITH reference AS (
+      SELECT datetime('now', '-' || strftime('%w', 'now') || ' days', 'start of day') AS reference_start
+    )
+    SELECT
+      COUNT(*) AS new_visitors,
+      reference.reference_start AS reference_start
+    FROM visitors
+    CROSS JOIN reference
+    WHERE site_id = ?
+      AND first_seen_at >= reference.reference_start
+  `)
+    .bind(siteId)
+    .first();
+
+  const newVisitors = Number(wowResult?.new_visitors || 0);
+  const referenceStart = wowResult?.reference_start || null;
+
   return {
     uniqueVisits: Number(countResult?.unique_visits || 0),
+    wow: {
+      change: newVisitors,
+      newVisitors,
+      reference: "last_sunday",
+      referenceStart,
+      trend: newVisitors > 0 ? "up" : "flat"
+    },
     countries: (topCountriesResult.results || []).map((row) => ({
       country: row.country,
       visits: Number(row.visits || 0)

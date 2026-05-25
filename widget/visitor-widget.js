@@ -152,7 +152,7 @@
 
   function formatCount(value) {
     const number = Number(value || 0);
-    return number < 100 ? String(number).padStart(2, "0") : formatNumber(number);
+    return number >= 0 && number < 10 ? String(number).padStart(2, "0") : formatNumber(number);
   }
 
   function isPortuguese() {

@@ -9,7 +9,7 @@ Build a lightweight, reusable visitor counter for static portfolio pages while k
 The first target site is the GitHub Pages portfolio:
 
 ```text
-https://lipeofreitas.github.io
+https://felipefreitas-perspective.github.io
 ```
 
 ## Future Target
